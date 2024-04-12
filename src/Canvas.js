@@ -2,6 +2,10 @@ import { useRef, useEffect } from 'react';
 import { blank_tile } from "./Tiles";
 
 let zoom = 5;
+let gridColour = "#2FF";
+let foregroundColour = "#FFF";
+let backgroundColour = "#000";
+let highlightcolour = "rgba(255, 0, 255, 0.2)"
 
 let blank = blank_tile;
 
@@ -18,14 +22,14 @@ export function Canvas(props, blank_tile) {
             context.beginPath();
             context.moveTo(x,0);
             context.lineTo(x,canvas.width);
-            context.strokeStyle = "#888";
+            context.strokeStyle = gridColour;
             context.stroke();
         }
         for (let y = 0; y < canvas.height; y += (8*zoom)){
             context.beginPath();
             context.moveTo(0,y);
             context.lineTo(canvas.height,y);
-            context.strokeStyle = "#888";
+            context.strokeStyle = gridColour;
             context.stroke();
         }
     }
@@ -36,10 +40,10 @@ export function Canvas(props, blank_tile) {
         for (let x = 0; x < 8; x++) {
           for (let y = 0; y < 8; y++){
             if (tile[y][x] == 0){
-              context.fillStyle = "#000";
+              context.fillStyle = backgroundColour;
               context.fillRect(locationX + (zoom * x), locationY + (zoom * y), zoom, zoom);
             } else {
-              context.fillStyle = "#FFF";
+              context.fillStyle = foregroundColour;
               context.fillRect(locationX + (zoom * x), locationY + (zoom * y), zoom, zoom);
             }
           }
@@ -72,7 +76,7 @@ export function Canvas(props, blank_tile) {
         let posX = pos.x
         let posY = pos.y
 
-        context.fillStyle = "rgba(255, 0, 0, 0.2)";
+        context.fillStyle = highlightcolour;
         context.fillRect(posX - (posX % (8 * zoom)), posY - (posY % (8 * zoom)), zoom*8, zoom*8);
 
     }
