@@ -1,32 +1,11 @@
 import { useRef, useEffect } from 'react';
-
-let example_tile=[
-    [0,0,1,1,1,1,0,0],
-    [0,0,1,1,1,1,0,0],
-    [0,0,1,1,1,1,0,0],
-    [0,0,1,1,1,1,0,0],
-    [0,0,1,1,1,1,0,0],
-    [0,0,1,1,1,1,0,0],
-    [0,0,1,1,1,1,0,0],
-    [0,0,1,1,1,1,0,0],
-];
-
-let blank_tile=[
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-]
+import { blank_tile } from "./Tiles";
 
 let zoom = 5;
 
-  
+let blank = blank_tile;
 
-export function Canvas(props) {
+export function Canvas(props, blank_tile) {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -67,16 +46,39 @@ export function Canvas(props) {
           
         }
     };
-
+    
     function blankScreen() {
         for (let x = 0; x < canvas.width; x += (8*zoom)) {
             for (let y = 0; y < canvas.height; y += (8*zoom)) {
-                drawTile(blank_tile, x, y);
+                drawTile(blank, x, y);
             }
         }
     }
+
+    function getMousePos(canvas, evt) {
+        var rect = canvas.getBoundingClientRect();
+        return {
+            x: (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width,
+            y: (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height
+        };
+    }
+
+    canvas.addEventListener("mousemove", cellHighlight, false);
     blankScreen();
     drawGrid();
+
+    function cellHighlight(event) {
+        var pos = getMousePos(canvas, event);
+        let posX = pos.x
+        let posY = pos.y
+
+        context.fillStyle = "rgba(255, 0, 0, 0.2)";
+        context.fillRect(posX - (posX % (8 * zoom)), posY - (posY % (8 * zoom)), zoom*8, zoom*8);
+
+    }
+
+   
+    
   }, []);
 
   return <canvas ref={canvasRef} width='3000' height='3200'/>
