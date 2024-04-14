@@ -31,4 +31,4 @@ let example_icon=[
     [0,0,0,0,0,0,0,0],
 ]
 
-export {blank_tile};
+export {blank_tile, example_tile};
