@@ -1,15 +1,22 @@
 import { useRef, useEffect } from 'react';
 import { blank_tile, example_tile } from "./Tiles";
 
-let zoom = 2;
+
+//temporary tile substitutes
+let blank = blank_tile;
+let example = example_tile;
+
+//Initialise global variables
+let zoom = 5;
 let gridColour = "#111";
 let foregroundColour = "#FFF";
 let backgroundColour = "#000";
-let highlightColour = "rgba(255, 0, 255, 0.2)"
+let highlightColour = "rgba(255, 0, 0, 0.5)"
 let zoomFactor = zoom * 8;
+let selectedTile = example;
 
-let blank = blank_tile;
-let example = example_tile;
+
+
 
 export function Canvas(props) {
   const canvasRef = useRef(null);
@@ -29,6 +36,7 @@ export function Canvas(props) {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
 
+//Draw the grid overlay
     function drawGrid() {
         for (let x = 0; x < canvas.height; x += (8*zoom)){
             context.beginPath();
@@ -47,7 +55,7 @@ export function Canvas(props) {
     }
 
     
-
+//Draws an individual tile at XY
     function drawTile(tile, locationX, locationY) {
         for (let x = 0; x < 8; x++) {
           for (let y = 0; y < 8; y++){
@@ -59,11 +67,20 @@ export function Canvas(props) {
           
         }
     };
+
+//Draws all tiles in tilemap
+    function drawMappedTiles() {
+      currentTiles.forEach((element) => {
+        drawTile(element.tile, element.x * zoomFactor, element.y * zoomFactor);
+      })
+    }
     
+//Clears the canvas    
     function blankScreen() {
         context.clearRect(0, 0, canvas.width, canvas.height)
     }
 
+//Computes the current mouse co-ordinates relative to the canvas
     function getMousePos(canvas, evt) {
         var rect = canvas.getBoundingClientRect();
         //previousCursor = currentCursor;
@@ -77,37 +94,54 @@ export function Canvas(props) {
     }
 
    
-
+//Highlights the cell currently hovered over
     function cellHighlight() {
       context.fillStyle = highlightColour;
       context.fillRect(currentTile.x*zoomFactor, currentTile.y*zoomFactor, zoomFactor, zoomFactor);
       
     }
 
-    function findTile(event) {
-      getMousePos(canvas, event);
-      
-      
-    }
-    
+//Blanks and rerenders the canvas
     function updateCanvas(event) {
         
         blankScreen()
         getMousePos(canvas, event)
         previousTile = currentTile;
         currentTile = tempTile;
+        drawMappedTiles();
         cellHighlight();
         drawGrid();
-        console.log(currentTile, previousTile)
-
+        
     }
+
+//Update the current tilemap with the new tile
+    function handleClick() {
+      let flag = false
+      currentTiles.forEach((element) => {
+        if (element.x == currentTile.x && element.y == currentTile.y){
+          element.tile = selectedTile
+          flag = true
+          return;
+        } 
+        
+        
+      })
+      if (flag == false){
+        currentTiles.push({x: currentTile.x, y: currentTile.y, tile: example})
+      }
+      
+      console.log(currentTiles)
+      
+    }
+    
     canvas.addEventListener("mousemove", updateCanvas, false);
-    blankScreen();
+    canvas.addEventListener("click", handleClick, false);
+    
     drawGrid();
 
    
     
   }, []);
 
-  return <canvas ref={canvasRef} width='1000' height='1200'/>
+  return <canvas ref={canvasRef} width='3000' height='3200'/>
 }
