@@ -10,6 +10,7 @@ let example = example_tile;
 let zoom = 5;
 let gridColour = "#111";
 let foregroundColour = "#FFF";
+let boxColour = "#F00"
 let backgroundColour = "#000";
 let highlightColour = "rgba(255, 0, 0, 0.5)"
 let zoomFactor = zoom * 8;
@@ -18,18 +19,19 @@ let selectedTile = example;
 
 
 
-export function Canvas(props) {
+export function TileSelect(props) {
   const canvasRef = useRef(null);
 
   useEffect(() => {
 
-    let currentTiles = [];
+    let currentTiles = [{tile: blank, x: 0, y: 0}, {tile: example, x: 0, y: 1}, {tile: example, x: 0, y: 2}];
     let previousTiles= [];
-    let currentCursor = { x: 0, y: 0}
-    let previousCursor = { x: 0, y: 0}
-    let currentTile = { x: 0, y: 0}
-    let previousTile = { x: 2, y: 2}
-    let tempTile = { x: 1, y: 1}
+    let currentCursor =   { x: 0, y: 0 }
+    let previousCursor =  { x: 0, y: 0 }
+    let selectedTile =    { x: 0, y: 0 }
+    let currentTile =     { x: 0, y: 0 }
+    let previousTile =    { x: 2, y: 2 }
+    let tempTile =        { x: 1, y: 1 }
     
 
     
@@ -38,14 +40,14 @@ export function Canvas(props) {
 
 //Draw the grid overlay
     function drawGrid() {
-        for (let x = 0; x < canvas.height; x += (8*zoom)){
+        for (let x = 0; x < canvas.height; x += (zoomFactor)){
             context.beginPath();
             context.moveTo(x,0);
             context.lineTo(x,canvas.height);
             context.strokeStyle = gridColour;
             context.stroke();
         }
-        for (let y = 0; y < canvas.width; y += (8*zoom)){
+        for (let y = 0; y < canvas.width; y += (zoomFactor)){
             context.beginPath();
             context.moveTo(0,y);
             context.lineTo(canvas.width,y);
@@ -69,7 +71,7 @@ export function Canvas(props) {
     };
 
 //Draws all tiles in tilemap
-    function drawMappedTiles() {
+    function drawStoredTiles() {
       currentTiles.forEach((element) => {
         drawTile(element.tile, element.x * zoomFactor, element.y * zoomFactor);
       })
@@ -93,57 +95,38 @@ export function Canvas(props) {
         
     }
 
-   
-//Highlights the cell currently hovered over
-    function cellHighlight() {
-      context.fillStyle = highlightColour;
-      context.fillRect(currentTile.x*zoomFactor, currentTile.y*zoomFactor, zoomFactor, zoomFactor);
-      
-    }
-
-//Blanks and rerenders the canvas
+    //Blanks and rerenders the canvas
     function updateCanvas(event) {
-        
-        blankScreen()
-        getMousePos(canvas, event)
-        previousTile = currentTile;
-        currentTile = tempTile;
-        drawMappedTiles();
-        cellHighlight();
-        drawGrid();
-        
-    }
+      getMousePos(canvas, event)
+      previousTile = currentTile;
+      currentTile = tempTile;     
+  }
+   
 
 //Update the current tilemap with the new tile
     function handleClick() {
-      let flag = false
-      currentTiles.forEach((element) => {
-        if (element.x == currentTile.x && element.y == currentTile.y){
-          element.tile = selectedTile
-          flag = true
-          return;
-        } 
-        
-        
-      })
-      if (flag == false){
-        currentTiles.push({x: currentTile.x, y: currentTile.y, tile: example})
-      }
-      
+      selectedTile = currentTile
+            
       blankScreen()  
-      drawMappedTiles();  
-      cellHighlight(); 
-      drawGrid();  
+      drawStoredTiles()
+      drawGrid(); 
+      context.beginPath();
+      context.strokeStyle = boxColour;
+      console.log(selectedTile)
+      context.rect(selectedTile.x* zoomFactor, selectedTile.y*zoomFactor, zoomFactor, zoomFactor)
+      context.stroke(); 
     }
     
     canvas.addEventListener("mousemove", updateCanvas, false);
     canvas.addEventListener("click", handleClick, false);
     
+    blankScreen()  
+    drawStoredTiles()
     drawGrid();
 
    
     
   }, []);
 
-  return <canvas ref={canvasRef} width='3000' height='3200'/>
+  return <canvas ref={canvasRef} width='300' height='300'/>
 }
