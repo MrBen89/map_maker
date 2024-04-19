@@ -15,6 +15,16 @@ let backgroundColour = "#000";
 let highlightColour = "rgba(255, 0, 0, 0.5)"
 let zoomFactor = zoom * 8;
 let selectedTile = example;
+let tileRam = [
+  [0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0],
+];
 
 
 
@@ -95,6 +105,27 @@ export function TileSelect(props) {
         
     }
 
+    //Read tile data
+    
+
+    function readTile(locationX, locationY) {
+      for (let x = 0; x < 8; x++) {
+        for (let y = 0; y < 8; y++){
+          const pixel = context.getImageData(locationX*zoomFactor + x*zoom, locationY*zoomFactor + y*zoom, 1, 1);
+          
+          if (pixel.data[0] == 255){
+            tileRam[y][x] = 1;
+          } else {
+            tileRam[y][x] = 0;
+          }
+          
+
+        }
+        
+      }
+      
+    };
+
     //Blanks and rerenders the canvas
     function updateCanvas(event) {
       getMousePos(canvas, event)
@@ -103,18 +134,35 @@ export function TileSelect(props) {
   }
    
 
-//Update the current tilemap with the new tile
+//Update the currently selected tile
     function handleClick() {
-      selectedTile = currentTile
+      selectedTile = currentTile;
+      
+      
             
       blankScreen()  
       drawStoredTiles()
+      readTile(selectedTile.x, selectedTile.y)
+      console.log(tileRam)
       drawGrid(); 
       context.beginPath();
       context.strokeStyle = boxColour;
-      console.log(selectedTile)
+      
       context.rect(selectedTile.x* zoomFactor, selectedTile.y*zoomFactor, zoomFactor, zoomFactor)
       context.stroke(); 
+      let tempRam = [];
+      tempRam.push(
+        tileRam[0], 
+        tileRam[1], 
+        tileRam[2], 
+        tileRam[3], 
+        tileRam[4], 
+        tileRam[5], 
+        tileRam[6], 
+        tileRam[7]);
+      props.setSelectedTile(tempRam);
+      console.log("RAM", tempRam)
+     
     }
     
     canvas.addEventListener("mousemove", updateCanvas, false);

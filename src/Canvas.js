@@ -13,28 +13,48 @@ let foregroundColour = "#FFF";
 let backgroundColour = "#000";
 let highlightColour = "rgba(255, 0, 0, 0.5)"
 let zoomFactor = zoom * 8;
-let selectedTile = example;
+let currentTiles = [];
+
 
 
 
 
 export function Canvas(props) {
   const canvasRef = useRef(null);
+  let selectedTile = props.selectedTile;
+  console.log("canvas ", selectedTile )
 
   useEffect(() => {
 
-    let currentTiles = [];
+    
     let previousTiles= [];
     let currentCursor = { x: 0, y: 0}
     let previousCursor = { x: 0, y: 0}
     let currentTile = { x: 0, y: 0}
     let previousTile = { x: 2, y: 2}
     let tempTile = { x: 1, y: 1}
+
+   
     
 
     
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
+
+    function tileCopy(b){
+      let a = []
+      a[0] = b[0].slice();
+      a[1] = b[1].slice();
+      a[2] = b[2].slice();
+      a[3] = b[3].slice();
+      a[4] = b[4].slice();
+      a[5] = b[5].slice();
+      a[6] = b[6].slice();
+      a[7] = b[7].slice();
+
+      return a
+
+    }
 
 //Draw the grid overlay
     function drawGrid() {
@@ -109,17 +129,17 @@ export function Canvas(props) {
         previousTile = currentTile;
         currentTile = tempTile;
         drawMappedTiles();
+        console.log(currentTiles)
         cellHighlight();
         drawGrid();
         
     }
-
-//Update the current tilemap with the new tile
-    function handleClick() {
+    function updateTileMap() {
+      console.log("click", props.selectedTile)
       let flag = false
       currentTiles.forEach((element) => {
         if (element.x == currentTile.x && element.y == currentTile.y){
-          element.tile = selectedTile
+          element.tile = tileCopy(selectedTile)
           flag = true
           return;
         } 
@@ -127,9 +147,14 @@ export function Canvas(props) {
         
       })
       if (flag == false){
-        currentTiles.push({x: currentTile.x, y: currentTile.y, tile: example})
+        currentTiles.push({x: currentTile.x, y: currentTile.y, tile: tileCopy(selectedTile)})
       }
-      
+    }
+
+//Update the current tilemap with the new tile
+    function handleClick() {
+     
+      updateTileMap()
       blankScreen()  
       drawMappedTiles();  
       cellHighlight(); 
@@ -143,7 +168,7 @@ export function Canvas(props) {
 
    
     
-  }, []);
+  }, [props.selectedTile]);
 
   return <canvas ref={canvasRef} width='3000' height='3200'/>
 }
