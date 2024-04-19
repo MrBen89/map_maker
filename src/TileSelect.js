@@ -1,10 +1,11 @@
 import { useRef, useEffect } from 'react';
-import { blank_tile, example_tile } from "./Tiles";
+import { blank_tile, example_tile1, example_tile2 } from "./Tiles";
 
 
 //temporary tile substitutes
 let blank = blank_tile;
-let example = example_tile;
+let example1 = example_tile1;
+let example2 = example_tile2;
 
 //Initialise global variables
 let zoom = 5;
@@ -14,7 +15,7 @@ let boxColour = "#F00"
 let backgroundColour = "#000";
 let highlightColour = "rgba(255, 0, 0, 0.5)"
 let zoomFactor = zoom * 8;
-let selectedTile = example;
+let selectedTile = example1;
 let tileRam = [
   [0,0,0,0,0,0,0,0],
   [0,0,0,0,0,0,0,0],
@@ -34,7 +35,7 @@ export function TileSelect(props) {
 
   useEffect(() => {
 
-    let currentTiles = [{tile: blank, x: 0, y: 0}, {tile: example, x: 0, y: 1}, {tile: example, x: 0, y: 2}];
+    let currentTiles = [{tile: blank, x: 0, y: 0}, {tile: example1, x: 0, y: 1}, {tile: example2, x: 0, y: 2}];
     let previousTiles= [];
     let currentCursor =   { x: 0, y: 0 }
     let previousCursor =  { x: 0, y: 0 }

@@ -1,10 +1,10 @@
 import { useRef, useEffect } from 'react';
-import { blank_tile, example_tile } from "./Tiles";
+import { blank_tile, example_tile1 } from "./Tiles";
 
 
 //temporary tile substitutes
 let blank = blank_tile;
-let example = example_tile;
+let example = example_tile1;
 
 //Initialise global variables
 let zoom = 5;
