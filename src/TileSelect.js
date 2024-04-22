@@ -1,11 +1,16 @@
 import { useRef, useEffect } from 'react';
-import { blank_tile, example_tile1, example_tile2 } from "./Tiles";
+import { blank_tile, example_tile1, example_tile2, example_tile3, example_tile4, example_tile5, example_tile6, example_tile7 } from "./Tiles";
 
 
 //temporary tile substitutes
 let blank = blank_tile;
 let example1 = example_tile1;
 let example2 = example_tile2;
+let example3 = example_tile3;
+let example4 = example_tile4;
+let example5 = example_tile5;
+let example6 = example_tile6;
+let example7 = example_tile7;
 
 //Initialise global variables
 let zoom = 5;
@@ -35,7 +40,11 @@ export function TileSelect(props) {
 
   useEffect(() => {
 
-    let currentTiles = [{tile: blank, x: 0, y: 0}, {tile: example1, x: 0, y: 1}, {tile: example2, x: 0, y: 2}];
+    let tileList = [blank, example1, example2, example3, example4, example5, example6, example7, ];
+
+    let currentTiles = [
+      
+    ];
     let previousTiles= [];
     let currentCursor =   { x: 0, y: 0 }
     let previousCursor =  { x: 0, y: 0 }
@@ -48,6 +57,31 @@ export function TileSelect(props) {
     
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
+
+// vLoads the needed tiles onto the currentTiles array
+    function tileLoader() {
+      let maxTilesX = Math.floor(canvas.width/zoomFactor);
+      let maxTilesY = Math.floor(canvas.height/zoomFactor);
+      let xCounter = 0;
+      let yCounter = 0;
+      tileList.forEach((element) => {
+        
+        if (xCounter == maxTilesX - 1){
+          currentTiles.push({tile: element, x: xCounter, y: yCounter});
+          yCounter++;
+          xCounter = 0;
+          
+        } else {
+          currentTiles.push({tile: element, x: xCounter, y: yCounter});
+          xCounter++;
+          
+        }
+
+      }
+        
+      )
+    }
+    tileLoader()
 
 //Draw the grid overlay
     function drawGrid() {

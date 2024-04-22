@@ -7,7 +7,7 @@ let blank = blank_tile;
 let example = example_tile1;
 
 //Initialise global variables
-let zoom = 5;
+let zoom = 10;
 let gridColour = "#111";
 let foregroundColour = "#FFF";
 let backgroundColour = "#000";
@@ -162,7 +162,7 @@ export function Canvas(props) {
     }
     
     canvas.addEventListener("mousemove", updateCanvas, false);
-    canvas.addEventListener("click", handleClick, false);
+    canvas.addEventListener("mousedown", handleClick, false);
     
     drawGrid();
 
