@@ -7,12 +7,12 @@ let blank = blank_tile;
 let example = example_tile1;
 
 //Initialise global variables
-let zoom = 10;
+
 let gridColour = "#111";
 let foregroundColour = "#FFF";
 let backgroundColour = "#000";
 let highlightColour = "rgba(255, 0, 0, 0.5)"
-let zoomFactor = zoom * 8;
+
 let currentTiles = [];
 
 
@@ -22,6 +22,8 @@ let currentTiles = [];
 export function Canvas(props) {
   const canvasRef = useRef(null);
   let selectedTile = props.selectedTile;
+  let zoom = props.zoom;
+  let zoomFactor = zoom * 8;;
   console.log("canvas ", selectedTile )
 
   useEffect(() => {
@@ -33,6 +35,12 @@ export function Canvas(props) {
     let currentTile = { x: 0, y: 0}
     let previousTile = { x: 2, y: 2}
     let tempTile = { x: 1, y: 1}
+
+    setTimeout(() => {
+      blankScreen()
+      drawMappedTiles();
+      drawGrid();
+    }, 100)
 
    
     
@@ -129,7 +137,6 @@ export function Canvas(props) {
         previousTile = currentTile;
         currentTile = tempTile;
         drawMappedTiles();
-        console.log(currentTiles)
         cellHighlight();
         drawGrid();
         
@@ -168,7 +175,7 @@ export function Canvas(props) {
 
    
     
-  }, [props.selectedTile]);
+  }, [props.selectedTile, props.zoom]);
 
   return <canvas ref={canvasRef} width='3000' height='3200'/>
 }
