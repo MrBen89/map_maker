@@ -13,8 +13,6 @@ let foregroundColour = "#FFF";
 let backgroundColour = "#000";
 let highlightColour = "rgba(255, 0, 0, 0.5)"
 let zoom = 5;
-let contrastZoom = 5;
-
 let currentTiles = [];
 
 
@@ -145,8 +143,10 @@ export function Canvas(props) {
         drawGrid();
         
     }
+
+    //Adds or updates the current tile to the tilemap
     function updateTileMap() {
-      console.log("click", props.zoom)
+      
       let flag = false
       currentTiles.forEach((element) => {
         if (element.x == currentTile.x && element.y == currentTile.y){
@@ -173,7 +173,7 @@ export function Canvas(props) {
       drawMappedTiles();  
       cellHighlight(); 
       drawGrid();  
-      console.log("clickyness zoom", zoom)
+      
       
     }
     
@@ -183,6 +183,8 @@ export function Canvas(props) {
     
     drawGrid();
 
+
+    //If event handlers notr removed, they will be readded everytime the canvas is rerendered, causing multiple vents to fire.
    return(() => {
     canvas.removeEventListener("mouseup", handleClick);
     canvas.removeEventListener("mousemove", updateCanvas);
