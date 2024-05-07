@@ -13,7 +13,9 @@ let foregroundColour = "#FFF";
 let backgroundColour = "#000";
 let highlightColour = "rgba(255, 0, 0, 0.5)"
 let zoom = 5;
-let currentTiles = [];
+let currentMidTiles = [];
+let currentLowerTiles = [];
+let currentUpperTiles = [];
 
 
 
@@ -23,6 +25,7 @@ export function Canvas(props) {
   const canvasRef = useRef(null);
   let selectedTile = props.selectedTile;
   zoom = props.zoom;
+  let layer = props.layer;
   let zoomFactor = zoom * 8;;
   console.log("canvas ", selectedTile )
 
@@ -98,9 +101,20 @@ export function Canvas(props) {
 
 //Draws all tiles in tilemap
     function drawMappedTiles() {
-      currentTiles.forEach((element) => {
-        drawTile(element.tile, element.x * zoomFactor, element.y * zoomFactor);
-      })
+      if (layer == 0){
+        currentUpperTiles.forEach((element) => {
+          drawTile(element.tile, element.x * zoomFactor, element.y * zoomFactor);
+        })
+      } else if (layer == 1) {
+        currentMidTiles.forEach((element) => {
+          drawTile(element.tile, element.x * zoomFactor, element.y * zoomFactor);
+        })
+      } else if (layer == 2) {
+        currentLowerTiles.forEach((element) => {
+          drawTile(element.tile, element.x * zoomFactor, element.y * zoomFactor);
+        })
+      }
+      
     }
     
 //Clears the canvas    
@@ -146,9 +160,16 @@ export function Canvas(props) {
 
     //Adds or updates the current tile to the tilemap
     function updateTileMap() {
-      
+      let currLayer = currentMidTiles
       let flag = false
-      currentTiles.forEach((element) => {
+      if (layer == 0) {
+        currLayer = currentUpperTiles
+      } else if (layer == 1) {
+        currLayer = currentMidTiles
+      } else if (layer == 2) {
+        currLayer = currentLowerTiles
+      }
+      currLayer.forEach((element) => {
         if (element.x == currentTile.x && element.y == currentTile.y){
           element.tile = tileCopy(selectedTile)
           flag = true
@@ -158,7 +179,7 @@ export function Canvas(props) {
         
       })
       if (flag == false){
-        currentTiles.push({x: currentTile.x, y: currentTile.y, tile: tileCopy(selectedTile)})
+        currLayer.push({x: currentTile.x, y: currentTile.y, tile: tileCopy(selectedTile)})
       }
       
         
@@ -190,7 +211,7 @@ export function Canvas(props) {
     canvas.removeEventListener("mousemove", updateCanvas);
   })
     
-  }, [props.selectedTile, props.zoom]);
+  }, [props.selectedTile, props.zoom, props.layer]);
 
   return <canvas ref={canvasRef} width='3000' height='3200'/>
 }

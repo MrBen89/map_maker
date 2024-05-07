@@ -5,6 +5,7 @@ import { Canvas } from './Canvas.js';
 export function DrawView() {
 
     const [zoom, setZoom] = useState(5);
+    const [layer, setLayer] = useState(1);
 
     const [selectedTile, setSelectedTile] = useState([
         [0,0,0,0,0,0,0,0],
@@ -22,6 +23,18 @@ export function DrawView() {
         console.log("Hi, i am value", value)
         
     };
+
+    function layerUpper(){
+        setLayer(0);
+    }
+
+    function layerMid(){
+        setLayer(1);
+    }
+
+    function layerLower(){
+        setLayer(2);
+    }
 
     function zoomIn(){
         if (zoom < 10){
@@ -41,7 +54,7 @@ export function DrawView() {
     return (
         <div className='Screen'>  
           <div className="Main-canvas">
-            <Canvas selectedTile={selectedTile} zoom={zoom}/>
+            <Canvas selectedTile={selectedTile} zoom={zoom} layer={layer}/>
           
         
           </div>
@@ -50,7 +63,10 @@ export function DrawView() {
             </div>
           <div>
             <input type="button"  value="+" onClick={() => zoomIn()}/>
-            <input type="button"  value="-" onClick={() => zoomOut()}/>  
+            <input type="button"  value="-" onClick={() => zoomOut()}/> 
+            <input type="button"  value="Upper" onClick={() => layerUpper()}/>  
+            <input type="button"  value="Mid" onClick={() => layerMid()}/>  
+            <input type="button"  value="Lower" onClick={() => layerLower()}/>   
             
           </div>  
             
