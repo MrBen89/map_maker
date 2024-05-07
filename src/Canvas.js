@@ -12,6 +12,8 @@ let gridColour = "#111";
 let foregroundColour = "#FFF";
 let backgroundColour = "#000";
 let highlightColour = "rgba(255, 0, 0, 0.5)"
+let zoom = 5;
+let contrastZoom = 5;
 
 let currentTiles = [];
 
@@ -22,7 +24,7 @@ let currentTiles = [];
 export function Canvas(props) {
   const canvasRef = useRef(null);
   let selectedTile = props.selectedTile;
-  let zoom = props.zoom;
+  zoom = props.zoom;
   let zoomFactor = zoom * 8;;
   console.log("canvas ", selectedTile )
 
@@ -36,14 +38,14 @@ export function Canvas(props) {
     let previousTile = { x: 2, y: 2}
     let tempTile = { x: 1, y: 1}
 
+    
+   
     setTimeout(() => {
       blankScreen()
       drawMappedTiles();
       drawGrid();
     }, 100)
 
-   
-    
 
     
     const canvas = canvasRef.current;
@@ -89,7 +91,7 @@ export function Canvas(props) {
           for (let y = 0; y < 8; y++){
             if (tile[y][x] === 1){
               context.fillStyle = foregroundColour;
-              context.fillRect(locationX + (zoom * x), locationY + (zoom * y), zoom, zoom);
+              context.fillRect(locationX + (props.zoom * x), locationY + (props.zoom * y), props.zoom, props.zoom);
             }
           }
           
@@ -127,6 +129,7 @@ export function Canvas(props) {
       context.fillStyle = highlightColour;
       context.fillRect(currentTile.x*zoomFactor, currentTile.y*zoomFactor, zoomFactor, zoomFactor);
       
+      
     }
 
 //Blanks and rerenders the canvas
@@ -135,14 +138,15 @@ export function Canvas(props) {
         blankScreen()
         getMousePos(canvas, event)
         previousTile = currentTile;
-        currentTile = tempTile;
+        currentTile.x = tempTile.x;
+        currentTile.y = tempTile.y;
         drawMappedTiles();
         cellHighlight();
         drawGrid();
         
     }
     function updateTileMap() {
-      console.log("click", props.selectedTile)
+      console.log("click", props.zoom)
       let flag = false
       currentTiles.forEach((element) => {
         if (element.x == currentTile.x && element.y == currentTile.y){
@@ -156,6 +160,9 @@ export function Canvas(props) {
       if (flag == false){
         currentTiles.push({x: currentTile.x, y: currentTile.y, tile: tileCopy(selectedTile)})
       }
+      
+        
+      
     }
 
 //Update the current tilemap with the new tile
@@ -166,14 +173,20 @@ export function Canvas(props) {
       drawMappedTiles();  
       cellHighlight(); 
       drawGrid();  
+      console.log("clickyness zoom", zoom)
+      
     }
     
     canvas.addEventListener("mousemove", updateCanvas, false);
-    canvas.addEventListener("mousedown", handleClick, false);
+    
+    canvas.addEventListener("mouseup", handleClick, false);
     
     drawGrid();
 
-   
+   return(() => {
+    canvas.removeEventListener("mouseup", handleClick);
+    canvas.removeEventListener("mousemove", updateCanvas);
+  })
     
   }, [props.selectedTile, props.zoom]);
 

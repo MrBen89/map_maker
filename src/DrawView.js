@@ -25,15 +25,15 @@ export function DrawView() {
 
     function zoomIn(){
         if (zoom < 10){
-            setZoom(zoom+1);
-            console.log(zoom)
+            setZoom(zoom+1)
+            console.log("app", zoom);
         }
     }
 
     function zoomOut(){
         if (zoom > 1){
-            setZoom(zoom-1);
-            console.log(zoom)
+            setZoom(zoom-1)
+            console.log("app", zoom);
         }
     }
     
@@ -49,8 +49,8 @@ export function DrawView() {
             <TileSelect setSelectedTile={handleTileSelect} selectedTile={selectedTile} />
             </div>
           <div>
-            <input type="button"  value="+" onClick={zoomIn}/>
-            <input type="button"  value="-" onClick={zoomOut}/>  
+            <input type="button"  value="+" onClick={() => zoomIn()}/>
+            <input type="button"  value="-" onClick={() => zoomOut()}/>  
             
           </div>  
             
