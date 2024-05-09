@@ -1,26 +1,18 @@
 import { useRef, useEffect } from 'react';
-import { blank_tile, example_tile1, example_tile2, example_tile3, example_tile4, example_tile5, example_tile6, example_tile7 } from "./Tiles";
+import { blank_tile, example_icon } from "./Tiles";
 
 
 //temporary tile substitutes
 let blank = blank_tile;
-let example1 = example_tile1;
-let example2 = example_tile2;
-let example3 = example_tile3;
-let example4 = example_tile4;
-let example5 = example_tile5;
-let example6 = example_tile6;
-let example7 = example_tile7;
+let example1 = example_icon;
+
 
 //Initialise global variables
 let zoom = 5;
 let gridColour = "#111";
-let foregroundColour = "#FFF";
+let foregroundColour = "#00F";
 let boxColour = "#F00"
-let backgroundColour = "#000";
-let highlightColour = "rgba(255, 0, 0, 0.5)"
 let zoomFactor = zoom * 8;
-let selectedTile = example1;
 let tileRam = [
   [0,0,0,0,0,0,0,0],
   [0,0,0,0,0,0,0,0],
@@ -35,22 +27,20 @@ let tileRam = [
 
 
 
-export function TileSelect(props) {
+export function IconSelect(props) {
   const canvasRef = useRef(null);
 
   useEffect(() => {
 
-    let tileList = [blank, example1, example2, example3, example4, example5, example6, example7, ];
+    let tileList = [blank, example1 ];
 
     let currentTiles = [
       
     ];
-    let previousTiles= [];
+    
     let currentCursor =   { x: 0, y: 0 }
-    let previousCursor =  { x: 0, y: 0 }
     let selectedTile =    { x: 0, y: 0 }
     let currentTile =     { x: 0, y: 0 }
-    let previousTile =    { x: 2, y: 2 }
     let tempTile =        { x: 1, y: 1 }
     
 
@@ -148,25 +138,25 @@ export function TileSelect(props) {
         for (let y = 0; y < 8; y++){
           const pixel = context.getImageData(locationX*zoomFactor + x*zoom, locationY*zoomFactor + y*zoom, 1, 1);
           
-          if (pixel.data[0] != 0){
-            tileRam[y][x] = 1;
-          } else {
+          if (pixel.data[0] == 0 && pixel.data[1] == 0 && pixel.data[2] == 0){
             tileRam[y][x] = 0;
+          } else {
+            tileRam[y][x] = 1;
           }
           
 
         }
         
       }
-      
+      console.log("readData", tileRam)
     };
 
     //Blanks and rerenders the canvas
     function updateCanvas(event) {
       getMousePos(canvas, event)
-      previousTile = currentTile;
-      currentTile = tempTile;
-      if (props.drawType == "Icon" ) {
+      currentTile = tempTile;  
+      
+      if (props.drawType == "Tile" ) {
         blankScreen()  
         drawStoredTiles()
         drawGrid();
@@ -183,7 +173,6 @@ export function TileSelect(props) {
       blankScreen()  
       drawStoredTiles()
       readTile(selectedTile.x, selectedTile.y)
-      console.log(tileRam)
       drawGrid(); 
       context.beginPath();
       context.strokeStyle = boxColour;
@@ -200,8 +189,8 @@ export function TileSelect(props) {
         tileRam[5], 
         tileRam[6], 
         tileRam[7]);
-      props.setSelectedTile(tempRam, "Tile");
-      console.log("RAM", tempRam)
+      props.setSelectedTile(tempRam, "Icon");
+      console.log("RAM", props.drawType)
      
     }
     

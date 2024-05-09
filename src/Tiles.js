@@ -89,13 +89,13 @@ let blank_tile = [
 
 let example_icon=[
     [0,0,0,1,1,0,0,0],
-    [0,0,1,1,1,1,1,0],
-    [0,0,1,1,1,1,1,0],
     [0,0,0,1,1,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
+    [0,1,1,1,1,1,1,0],
+    [0,1,1,1,1,1,1,0],
+    [0,0,0,1,1,0,0,0],
+    [0,0,0,1,1,0,0,0],
+    [0,0,0,1,1,0,0,0],
+    [0,0,0,1,1,0,0,0],
 ]
 
-export {blank_tile, example_tile1, example_tile2, example_tile3, example_tile4, example_tile5, example_tile6, example_tile7};
+export {blank_tile, example_tile1, example_tile2, example_tile3, example_tile4, example_tile5, example_tile6, example_tile7, example_icon};

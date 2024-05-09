@@ -15,22 +15,46 @@ Canvas {
 }
 
 .Main-canvas {
- 
+  float: left;
   max-height: 80vh;
   max-width: 70%;
   overflow: hidden;
   margin: 2%;
-  display: inline-block;
+ 
+}
+
+.Selectors {
+  float: right;
+  max-height: 80vh;
+  max-width: 20%;
+  overflow: hidden;
+  margin: 2%;
+  vertical-align: top;
+  
 }
 
 .Tile-selector {
-  
-  max-height: 80%;
-  max-width: 20%;
+  float: right;
+  max-height: 35vh;
+  max-width: 20vw;
   overflow: hidden;
   margin: 2%;
   display: inline-block;
   vertical-align: top;
+}
+
+.Icon-selector {
+  float: right;
+  max-height: 35vh;
+  max-width: 20vw;
+  overflow: hidden;
+  margin: 2%;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.Buttons {
+  float: left;
 }
 
 .App-header {
