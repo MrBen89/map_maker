@@ -185,11 +185,7 @@ export function TileSelect(props) {
       readTile(selectedTile.x, selectedTile.y)
       console.log(tileRam)
       drawGrid(); 
-      context.beginPath();
-      context.strokeStyle = boxColour;
       
-      context.rect(selectedTile.x* zoomFactor, selectedTile.y*zoomFactor, zoomFactor, zoomFactor)
-      context.stroke(); 
       let tempRam = [];
       tempRam.push(
         tileRam[0], 
@@ -203,6 +199,11 @@ export function TileSelect(props) {
       props.setSelectedTile(tempRam, "Tile");
       console.log("RAM", tempRam)
      
+      context.beginPath();
+      context.strokeStyle = boxColour;
+      
+      context.rect(selectedTile.x* zoomFactor, selectedTile.y*zoomFactor, zoomFactor, zoomFactor)
+      context.stroke(); 
     }
     
     canvas.addEventListener("mousemove", updateCanvas, false);

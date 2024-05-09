@@ -10,12 +10,16 @@ let example = example_tile1;
 
 let gridColour = "#111";
 let foregroundColour = "#FFF";
+let iconColour = "#00F";
 let backgroundColour = "#000";
 let highlightColour = "rgba(255, 0, 0, 0.5)"
 let zoom = 5;
 let currentMidTiles = [];
 let currentLowerTiles = [];
 let currentUpperTiles = [];
+let currentMidIcons = [];
+let currentLowerIcons = [];
+let currentUpperIcons = [];
 
 
 
@@ -44,6 +48,7 @@ export function Canvas(props) {
     setTimeout(() => {
       blankScreen()
       drawMappedTiles();
+      drawMappedIcons();
       drawGrid();
     }, 100)
 
@@ -87,11 +92,12 @@ export function Canvas(props) {
 
     
 //Draws an individual tile at XY
-    function drawTile(tile, locationX, locationY) {
+    function drawTile(tile, locationX, locationY, colour) {
         for (let x = 0; x < 8; x++) {
           for (let y = 0; y < 8; y++){
             if (tile[y][x] === 1){
-              context.fillStyle = foregroundColour;
+
+              context.fillStyle = colour;
               context.fillRect(locationX + (props.zoom * x), locationY + (props.zoom * y), props.zoom, props.zoom);
             }
           }
@@ -103,15 +109,33 @@ export function Canvas(props) {
     function drawMappedTiles() {
       if (layer == 0){
         currentUpperTiles.forEach((element) => {
-          drawTile(element.tile, element.x * zoomFactor, element.y * zoomFactor);
+          drawTile(element.tile, element.x * zoomFactor, element.y * zoomFactor, foregroundColour);
         })
       } else if (layer == 1) {
         currentMidTiles.forEach((element) => {
-          drawTile(element.tile, element.x * zoomFactor, element.y * zoomFactor);
+          drawTile(element.tile, element.x * zoomFactor, element.y * zoomFactor, foregroundColour);
         })
       } else if (layer == 2) {
         currentLowerTiles.forEach((element) => {
-          drawTile(element.tile, element.x * zoomFactor, element.y * zoomFactor);
+          drawTile(element.tile, element.x * zoomFactor, element.y * zoomFactor, foregroundColour);
+        })
+      }
+      
+    }
+
+    //Draws all icons in iconmap
+    function drawMappedIcons() {
+      if (layer == 0){
+        currentUpperIcons.forEach((element) => {
+          drawTile(element.tile, element.x * zoomFactor, element.y * zoomFactor, iconColour);
+        })
+      } else if (layer == 1) {
+        currentMidIcons.forEach((element) => {
+          drawTile(element.tile, element.x * zoomFactor, element.y * zoomFactor, iconColour);
+        })
+      } else if (layer == 2) {
+        currentLowerIcons.forEach((element) => {
+          drawTile(element.tile, element.x * zoomFactor, element.y * zoomFactor, iconColour);
         })
       }
       
@@ -153,6 +177,7 @@ export function Canvas(props) {
         currentTile.x = tempTile.x;
         currentTile.y = tempTile.y;
         drawMappedTiles();
+        drawMappedIcons();
         cellHighlight();
         drawGrid();
         
@@ -160,7 +185,7 @@ export function Canvas(props) {
 
     //Adds or updates the current tile to the tilemap
     function updateTileMap() {
-      let currLayer = currentMidTiles
+      let currLayer
       let flag = false
       if (layer == 0) {
         currLayer = currentUpperTiles
@@ -181,6 +206,32 @@ export function Canvas(props) {
       if (flag == false){
         currLayer.push({x: currentTile.x, y: currentTile.y, tile: tileCopy(selectedTile)})
       }
+           
+    }
+
+    //Adds or updates the current icon to the iconmap
+    function updateIconMap() {
+      let currLayer
+      let flag = false
+      if (layer == 0) {
+        currLayer = currentUpperIcons
+      } else if (layer == 1) {
+        currLayer = currentMidIcons
+      } else if (layer == 2) {
+        currLayer = currentLowerIcons
+      }
+      currLayer.forEach((element) => {
+        if (element.x == currentTile.x && element.y == currentTile.y){
+          element.tile = tileCopy(selectedTile)
+          flag = true
+          return;
+        } 
+        
+        
+      })
+      if (flag == false){
+        currLayer.push({x: currentTile.x, y: currentTile.y, tile: tileCopy(selectedTile)})
+      }
       
         
       
@@ -188,10 +239,16 @@ export function Canvas(props) {
 
 //Update the current tilemap with the new tile
     function handleClick() {
-     
-      updateTileMap()
+      if (props.drawType == "Tile") {
+        console.log("tile")
+        updateTileMap()
+      } else if (props.drawType == "Icon") {
+        updateIconMap()
+      }
+      
       blankScreen()  
-      drawMappedTiles();  
+      drawMappedTiles(); 
+      drawMappedIcons(); 
       cellHighlight(); 
       drawGrid();
       //updates the state for the image download. currently delivers data correctly, not sure how to convert that to .jpg. also quite slow
