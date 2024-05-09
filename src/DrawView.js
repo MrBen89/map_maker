@@ -6,6 +6,7 @@ export function DrawView() {
 
     const [zoom, setZoom] = useState(5);
     const [layer, setLayer] = useState(1);
+    const [jpegData, setjpegData] = useState();
 
     const [selectedTile, setSelectedTile] = useState([
         [0,0,0,0,0,0,0,0],
@@ -23,6 +24,10 @@ export function DrawView() {
         console.log("Hi, i am value", value)
         
     };
+
+    function handleJpeg(data){
+        setjpegData(data)
+    }
 
     function layerUpper(){
         setLayer(0);
@@ -49,12 +54,14 @@ export function DrawView() {
             console.log("app", zoom);
         }
     }
+
+    
     
 
     return (
         <div className='Screen'>  
           <div className="Main-canvas">
-            <Canvas selectedTile={selectedTile} zoom={zoom} layer={layer}/>
+            <Canvas selectedTile={selectedTile} zoom={zoom} layer={layer} handlejpegData={handleJpeg}/>
           
         
           </div>
@@ -66,7 +73,8 @@ export function DrawView() {
             <input type="button"  value="-" onClick={() => zoomOut()}/> 
             <input type="button"  value="Upper" onClick={() => layerUpper()}/>  
             <input type="button"  value="Mid" onClick={() => layerMid()}/>  
-            <input type="button"  value="Lower" onClick={() => layerLower()}/>   
+            <input type="button"  value="Lower" onClick={() => layerLower()}/> 
+            <input type="button"  value="Save to JPEG" href={jpegData}/>  
             
           </div>  
             

@@ -193,9 +193,11 @@ export function Canvas(props) {
       blankScreen()  
       drawMappedTiles();  
       cellHighlight(); 
-      drawGrid();  
-      
-      
+      drawGrid();
+      //updates the state for the image download. currently delivers data correctly, not sure how to convert that to .jpg. also quite slow
+      //let jpeg = canvas.toDataURL("image/jpeg", 1).replace("image/jpeg", "image/octet-stream");
+      //props.handlejpegData(jpeg)  
+          
     }
     
     canvas.addEventListener("mousemove", updateCanvas, false);
@@ -203,6 +205,8 @@ export function Canvas(props) {
     canvas.addEventListener("mouseup", handleClick, false);
     
     drawGrid();
+
+  
 
 
     //If event handlers notr removed, they will be readded everytime the canvas is rerendered, causing multiple vents to fire.
