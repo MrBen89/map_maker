@@ -22,16 +22,15 @@ let currentLowerIcons = [];
 let currentUpperIcons = [];
 
 
-
-
-
 export function Canvas(props) {
   const canvasRef = useRef(null);
   let selectedTile = props.selectedTile;
   zoom = props.zoom;
   let layer = props.layer;
   let zoomFactor = zoom * 8;;
-  console.log("canvas ", selectedTile )
+  let viewCoords = props.viewCoords;
+  
+  console.log(viewCoords)
 
   useEffect(() => {
 
@@ -56,6 +55,8 @@ export function Canvas(props) {
     
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
+    let viewWidth = Math.floor(canvas.width/zoomFactor);
+    let viewHeight = Math.floor(canvas.height/zoomFactor);
 
     function tileCopy(b){
       let a = []
@@ -109,15 +110,24 @@ export function Canvas(props) {
     function drawMappedTiles() {
       if (layer == 0){
         currentUpperTiles.forEach((element) => {
-          drawTile(element.tile, element.x * zoomFactor, element.y * zoomFactor, foregroundColour);
+          console.log(element.x, viewCoords[0])
+          if (element.x >= viewCoords[0]  && element.x < viewCoords[0] +viewWidth && element.y >= viewCoords[1] && element.y < viewCoords[1] + viewHeight) {
+              console.log("drawing")
+              drawTile(element.tile, (element.x - viewCoords[0]) * zoomFactor, (element.y - viewCoords[1]) * zoomFactor, foregroundColour);
+            }
+          
         })
       } else if (layer == 1) {
         currentMidTiles.forEach((element) => {
-          drawTile(element.tile, element.x * zoomFactor, element.y * zoomFactor, foregroundColour);
+          if (element.x >= viewCoords[0]  && element.x < viewCoords[0] +viewWidth && element.y >= viewCoords[1] && element.y < viewCoords[1] + viewHeight) {
+            drawTile(element.tile, (element.x - viewCoords[0]) * zoomFactor, (element.y - viewCoords[1]) * zoomFactor, foregroundColour);
+          }
         })
       } else if (layer == 2) {
         currentLowerTiles.forEach((element) => {
-          drawTile(element.tile, element.x * zoomFactor, element.y * zoomFactor, foregroundColour);
+          if (element.x >= viewCoords[0]  && element.x < viewCoords[0] +viewWidth && element.y >= viewCoords[1] && element.y < viewCoords[1] + viewHeight) {
+            drawTile(element.tile, (element.x - viewCoords[0]) * zoomFactor, (element.y - viewCoords[1]) * zoomFactor, foregroundColour);
+          }
         })
       }
       
@@ -127,15 +137,21 @@ export function Canvas(props) {
     function drawMappedIcons() {
       if (layer == 0){
         currentUpperIcons.forEach((element) => {
-          drawTile(element.tile, element.x * zoomFactor, element.y * zoomFactor, iconColour);
+          if (element.x >= viewCoords[0]  && element.x < viewCoords[0] +viewWidth && element.y >= viewCoords[1] && element.y < viewCoords[1] + viewHeight) {
+            drawTile(element.tile, (element.x - viewCoords[0]) * zoomFactor, (element.y - viewCoords[1]) * zoomFactor, iconColour);
+          }
         })
       } else if (layer == 1) {
         currentMidIcons.forEach((element) => {
-          drawTile(element.tile, element.x * zoomFactor, element.y * zoomFactor, iconColour);
+          if (element.x >= viewCoords[0]  && element.x < viewCoords[0] +viewWidth && element.y >= viewCoords[1] && element.y < viewCoords[1] + viewHeight) {
+            drawTile(element.tile, (element.x - viewCoords[0]) * zoomFactor, (element.y - viewCoords[1]) * zoomFactor, iconColour);
+          }
         })
       } else if (layer == 2) {
         currentLowerIcons.forEach((element) => {
-          drawTile(element.tile, element.x * zoomFactor, element.y * zoomFactor, iconColour);
+          if (element.x >= viewCoords[0]  && element.x < viewCoords[0] +viewWidth && element.y >= viewCoords[1] && element.y < viewCoords[1] + viewHeight) {
+            drawTile(element.tile, (element.x - viewCoords[0]) * zoomFactor, (element.y - viewCoords[1]) * zoomFactor, iconColour);
+          }
         })
       }
       
@@ -195,7 +211,7 @@ export function Canvas(props) {
         currLayer = currentLowerTiles
       }
       currLayer.forEach((element) => {
-        if (element.x == currentTile.x && element.y == currentTile.y){
+        if (element.x == currentTile.x + viewCoords[0] && element.y == currentTile.y + viewCoords[1]){
           element.tile = tileCopy(selectedTile)
           flag = true
           return;
@@ -204,7 +220,7 @@ export function Canvas(props) {
         
       })
       if (flag == false){
-        currLayer.push({x: currentTile.x, y: currentTile.y, tile: tileCopy(selectedTile)})
+        currLayer.push({x: currentTile.x + viewCoords[0], y: currentTile.y + viewCoords[1], tile: tileCopy(selectedTile)})
       }
            
     }
@@ -272,7 +288,7 @@ export function Canvas(props) {
     canvas.removeEventListener("mousemove", updateCanvas);
   })
     
-  }, [props.selectedTile, props.zoom, props.layer]);
+  }, [props.selectedTile, props.zoom, props.layer, props.viewCoords]);
 
   return <canvas ref={canvasRef} width='3000' height='3200'/>
 }

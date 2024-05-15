@@ -170,16 +170,15 @@ export function TileSelect(props) {
         blankScreen()  
         drawStoredTiles()
         drawGrid();
-      }  
-  }
+      } 
+      } 
+  
    
 
 //Update the currently selected tile
     function handleClick() {
       selectedTile = currentTile;
-      
-      
-            
+                 
       blankScreen()  
       drawStoredTiles()
       readTile(selectedTile.x, selectedTile.y)
@@ -200,8 +199,7 @@ export function TileSelect(props) {
       console.log("RAM", tempRam)
      
       context.beginPath();
-      context.strokeStyle = boxColour;
-      
+      context.strokeStyle = boxColour;      
       context.rect(selectedTile.x* zoomFactor, selectedTile.y*zoomFactor, zoomFactor, zoomFactor)
       context.stroke(); 
     }
@@ -218,7 +216,7 @@ export function TileSelect(props) {
       canvas.removeEventListener("mousemove", updateCanvas);
     })
     
-  }, [props.drawType]);
+  }, []);
 
   return <canvas ref={canvasRef} width='300' height='300'/>
 }
