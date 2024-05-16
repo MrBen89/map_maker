@@ -237,7 +237,7 @@ export function Canvas(props) {
         currLayer = currentLowerIcons
       }
       currLayer.forEach((element) => {
-        if (element.x == currentTile.x && element.y == currentTile.y){
+        if (element.x == currentTile.x + viewCoords[0] && element.y == currentTile.y + viewCoords[1]){
           element.tile = tileCopy(selectedTile)
           flag = true
           return;
@@ -246,7 +246,7 @@ export function Canvas(props) {
         
       })
       if (flag == false){
-        currLayer.push({x: currentTile.x, y: currentTile.y, tile: tileCopy(selectedTile)})
+        currLayer.push({x: currentTile.x + viewCoords[0], y: currentTile.y + viewCoords[1], tile: tileCopy(selectedTile)})
       }
       
         

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TileSelect } from './TileSelect.js';
 import { IconSelect } from './IconSelect.js';
 import { Canvas } from './Canvas.js';
@@ -77,9 +77,11 @@ export function DrawView() {
     function scrollRight(){
         setViewCoords([viewCoords[0] +1, viewCoords[1]])
         console.log(viewCoords)
-    }
+    }       
+   
     
-
+   
+       
     return (
         <div className='Screen'>  
           <div className="Main-canvas">
