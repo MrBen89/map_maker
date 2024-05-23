@@ -43,7 +43,7 @@ export function Canvas(props) {
     let tempTile = { x: 1, y: 1}
 
     
-   
+    loadLocal();
     setTimeout(() => {
       blankScreen()
       drawMappedTiles();
@@ -253,6 +253,36 @@ export function Canvas(props) {
       
     }
 
+
+    //functions to save and load data locally
+    
+    function loadLocal(){
+      try {
+        currentLowerTiles = JSON.parse(localStorage.getItem("lowerTileMap"));
+        currentMidTiles = JSON.parse(localStorage.getItem("midTileMap"));
+        currentUpperTiles = JSON.parse(localStorage.getItem("upperTileMap"));
+        
+        console.log('tilemap loaded successfuly')
+    } catch (err) {
+        console.error('something went wrong', err)
+        return undefined;
+    }
+    }
+    
+
+    function saveLocal() {
+      try{
+        localStorage.setItem('lowerTileMap', JSON.stringify(currentLowerTiles))
+        localStorage.setItem('midTileMap', JSON.stringify(currentMidTiles))
+        localStorage.setItem('upperTileMap', JSON.stringify(currentUpperTiles))
+        console.log('tilemap saved successfuly')
+      } catch (err) {
+        console.error('something went wrong', err)
+        return undefined;
+      }
+            
+    }
+
 //Update the current tilemap with the new tile
     function handleClick() {
       if (props.drawType == "Tile") {
@@ -261,7 +291,8 @@ export function Canvas(props) {
       } else if (props.drawType == "Icon") {
         updateIconMap()
       }
-      
+
+      saveLocal()
       blankScreen()  
       drawMappedTiles(); 
       drawMappedIcons(); 
