@@ -1,5 +1,6 @@
 import { useRef, useEffect } from 'react';
-import { blank_tile, example_tile1, example_tile2, example_tile3, example_tile4, example_tile5, example_tile6, example_tile7 } from "./Tiles";
+import { blank_tile, example_tile1, example_tile2, example_tile3, example_tile4, example_tile5, 
+        example_tile6, example_tile7, example_tile8, example_tile9, example_tile10, example_tile11, } from "./Tiles";
 
 
 //temporary tile substitutes
@@ -11,6 +12,10 @@ let example4 = example_tile4;
 let example5 = example_tile5;
 let example6 = example_tile6;
 let example7 = example_tile7;
+let example8 = example_tile8;
+let example9 = example_tile9;
+let example10 = example_tile10;
+let example11 = example_tile11;
 
 //Initialise global variables
 let zoom = 5;
@@ -40,7 +45,7 @@ export function TileSelect(props) {
 
   useEffect(() => {
 
-    let tileList = [blank, example1, example2, example3, example4, example5, example6, example7, ];
+    let tileList = [blank, example1, example2, example3, example4, example5, example6, example7, example8, example9, example10, example11, ];
 
     let currentTiles = [
       
