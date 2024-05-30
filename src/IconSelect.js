@@ -208,5 +208,5 @@ export function IconSelect(props) {
     
   }, [props.drawType]);
 
-  return <canvas ref={canvasRef} width='300' height='300'/>
+  return <canvas ref={canvasRef} width='320' height='320'/>
 }

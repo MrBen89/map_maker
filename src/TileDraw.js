@@ -3,19 +3,6 @@ import { blank_tile, example_tile1, example_tile2, example_tile3, example_tile4,
         example_tile6, example_tile7, example_tile8, example_tile9, example_tile10, example_tile11, } from "./Tiles";
 
 
-//temporary tile substitutes
-let blank = blank_tile;
-let example1 = example_tile1;
-let example2 = example_tile2;
-let example3 = example_tile3;
-let example4 = example_tile4;
-let example5 = example_tile5;
-let example6 = example_tile6;
-let example7 = example_tile7;
-let example8 = example_tile8;
-let example9 = example_tile9;
-let example10 = example_tile10;
-let example11 = example_tile11;
 
 //Initialise global variables
 let zoom = 5;
@@ -25,11 +12,11 @@ let boxColour = "#F00"
 let backgroundColour = "#000";
 let highlightColour = "rgba(255, 0, 0, 0.5)"
 let zoomFactor = zoom * 8;
-let selectedTile = example1;
+
 let tileRam = [
   [0,0,0,0,0,0,0,0],
   [0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0],
+  [0,0,1,0,0,0,0,0],
   [0,0,0,0,0,0,0,0],
   [0,0,0,0,0,0,0,0],
   [0,0,0,0,0,0,0,0],
@@ -40,15 +27,39 @@ let tileRam = [
 
 
 
-export function TileSelect(props) {
+export function TileDraw(props) {
   const canvasRef = useRef(null);
+
+  console.log("init" + props.tileList)
+
+  function tileCopy(b){
+    let a = []
+    a[0] = b[0].slice();
+    a[1] = b[1].slice();
+    a[2] = b[2].slice();
+    a[3] = b[3].slice();
+    a[4] = b[4].slice();
+    a[5] = b[5].slice();
+    a[6] = b[6].slice();
+    a[7] = b[7].slice();
+
+    return a
+
+  }
+
+  function saveTile() {
+    let tempTileList = []
+    props.tileList.forEach((tile) => tempTileList.push(tile.slice()))
+    tempTileList.push(tileCopy(tileRam)); 
+    props.setTileList(tempTileList)
+    console.log(tempTileList)
+    props.handleTileEdit(false)
+  }
+  
 
   useEffect(() => {
 
-    let tileList = props.tileList;
-    console.log("TS list" + tileList)
-
-    let currentTiles = [
+        let currentTiles = [
       
     ];
     let previousTiles= [];
@@ -64,30 +75,6 @@ export function TileSelect(props) {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
 
-// vLoads the needed tiles onto the currentTiles array
-    function tileLoader() {
-      let maxTilesX = Math.floor(canvas.width/zoomFactor);
-      let maxTilesY = Math.floor(canvas.height/zoomFactor);
-      let xCounter = 0;
-      let yCounter = 0;
-      tileList.forEach((element) => {
-        
-        if (xCounter == maxTilesX - 1){
-          currentTiles.push({tile: element, x: xCounter, y: yCounter});
-          yCounter++;
-          xCounter = 0;
-          
-        } else {
-          currentTiles.push({tile: element, x: xCounter, y: yCounter});
-          xCounter++;
-          
-        }
-
-      }
-        
-      )
-    }
-    tileLoader()
 
 //Draw the grid overlay
     function drawGrid() {
@@ -108,26 +95,6 @@ export function TileSelect(props) {
     }
 
     
-//Draws an individual tile at XY
-    function drawTile(tile, locationX, locationY) {
-        for (let x = 0; x < 8; x++) {
-          for (let y = 0; y < 8; y++){
-            if (tile[y][x] === 1){
-              context.fillStyle = foregroundColour;
-              context.fillRect(locationX + (zoom * x), locationY + (zoom * y), zoom, zoom);
-            }
-          }
-          
-        }
-    };
-
-//Draws all tiles in tilemap
-    function drawStoredTiles() {
-      currentTiles.forEach((element) => {
-        drawTile(element.tile, element.x * zoomFactor, element.y * zoomFactor);
-      })
-    }
-    
 //Clears the canvas    
     function blankScreen() {
         context.clearRect(0, 0, canvas.width, canvas.height)
@@ -141,18 +108,18 @@ export function TileSelect(props) {
         currentCursor.y = (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height
         tempTile.x =  (currentCursor.x - (currentCursor.x % zoomFactor))/zoomFactor
         tempTile.y =  (currentCursor.y - (currentCursor.y % zoomFactor))/zoomFactor
-        //console.log(currentTile, previousTile)
-
-        
+           
     }
+
+
 
     //Read tile data
     
 
-    function readTile(locationX, locationY) {
+    function readTile() {
       for (let x = 0; x < 8; x++) {
         for (let y = 0; y < 8; y++){
-          const pixel = context.getImageData(locationX*zoomFactor + x*zoom, locationY*zoomFactor + y*zoom, 1, 1);
+          const pixel = context.getImageData((x+1)*zoomFactor, (y+1)*zoomFactor, 1, 1);
           
           if (pixel.data[0] != 0){
             tileRam[y][x] = 1;
@@ -172,38 +139,41 @@ export function TileSelect(props) {
       getMousePos(canvas, event)
       previousTile = currentTile;
       currentTile = tempTile;
-      if (props.drawType == "Icon" ) {
-        blankScreen()  
-        drawStoredTiles()
-        drawGrid();
+      
+      blankScreen()  
+      drawTile()
+      drawGrid();
       } 
-      } 
+
+  function drawTile(){
+    for (let x = 0; x < 8; x++){
+      for (let y = 0; y < 8; y++){
+        if (tileRam[y][x] == 1){
+          drawPixel(x,y)
+        }
+        
+      }
+    }
+  }
   
-   
+   function drawPixel(x, y) {
+    context.fillStyle = foregroundColour;
+    context.fillRect(x* zoomFactor, y*zoomFactor, zoomFactor, zoomFactor)
+  }
 
 //Update the currently selected tile
     function handleClick() {
       selectedTile = currentTile;
-                 
-      blankScreen()  
-      drawStoredTiles()
-      readTile(selectedTile.x, selectedTile.y)
-      console.log(tileRam)
-      drawGrid(); 
+      if (tileRam[selectedTile.y][selectedTile.x] == 1) {
+        tileRam[selectedTile.y][selectedTile.x] = 0;
+      } else {
+        tileRam[selectedTile.y][selectedTile.x] = 1;
+      }
+      blankScreen();      
+      drawTile();
+      drawGrid();
       
-      let tempRam = [];
-      tempRam.push(
-        tileRam[0], 
-        tileRam[1], 
-        tileRam[2], 
-        tileRam[3], 
-        tileRam[4], 
-        tileRam[5], 
-        tileRam[6], 
-        tileRam[7]);
-      props.setSelectedTile(tempRam, "Tile");
-      console.log("RAM", tempRam)
-     
+      
       context.beginPath();
       context.strokeStyle = boxColour;      
       context.rect(selectedTile.x* zoomFactor, selectedTile.y*zoomFactor, zoomFactor, zoomFactor)
@@ -213,9 +183,11 @@ export function TileSelect(props) {
     canvas.addEventListener("mousemove", updateCanvas, false);
     canvas.addEventListener("click", handleClick, false);
     
-    blankScreen()  
-    drawStoredTiles()
-    drawGrid();
+   blankScreen()  
+      drawTile()
+      drawGrid();
+
+    
 
     return(() => {
       canvas.removeEventListener("click", handleClick);
@@ -224,5 +196,9 @@ export function TileSelect(props) {
     
   }, []);
 
-  return <canvas ref={canvasRef} width='320' height='320'/>
+  return (<div>
+    <canvas ref={canvasRef} width={8*zoomFactor} height={8*zoomFactor}/>
+    <input type="button" value="Save Tile" onClick={() => saveTile()} /> 
+    <input type="button" value="Cancel" onClick={() => props.handleTileEdit(false)} /> 
+  </div> )
 }
