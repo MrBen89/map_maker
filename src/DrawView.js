@@ -19,6 +19,21 @@ let example9 = example_tile9;
 let example10 = example_tile10;
 let example11 = example_tile11;
 
+let tempTileList = [blank, example1, example2, example3, example4, example5, example6, example7, example8, example9, example10, example11, ];
+let tilesLoaded = false;
+
+function loadLocal(){
+    try {
+      tempTileList = JSON.parse(localStorage.getItem("tileList"));      
+      console.log('tilemap loaded successfuly')
+    } catch (err) {
+      console.error('something went wrong', err)
+      return undefined;
+  }
+  }
+
+  loadLocal()
+
 export function DrawView() {
 
     const [zoom, setZoom] = useState(5);
@@ -26,7 +41,7 @@ export function DrawView() {
     const [jpegData, setjpegData] = useState();
     const [drawType, setDrawType] = useState("Tile");
     const [viewCoords, setViewCoords] = useState([0,0]);
-    const [tileEditMode, setTileEditMode] = useState(true);
+    const [tileEditMode, setTileEditMode] = useState(false);
 
     const [selectedTile, setSelectedTile] = useState([
         [0,0,0,0,0,0,0,0],
@@ -39,8 +54,24 @@ export function DrawView() {
         [0,0,0,0,0,0,0,0],
     ]);
 
-    const [tileList, setTileList] = useState([blank, example1, example2, example3, example4, example5, example6, example7, example8, example9, example10, example11, ])
-    console.log("state" + tileList)
+    
+    const [tileList, setTileList] = useState(JSON.parse(localStorage.getItem('tileList')))
+   
+
+    function loadTiles() {
+        if (tileList == null ) {
+            setTileList(tempTileList)
+            
+            tilesLoaded = true
+        } 
+    }
+
+    loadTiles() 
+
+
+    
+     
+      
 
     const handleTileSelect = (value, type) => {
         setSelectedTile(value);
@@ -100,7 +131,7 @@ export function DrawView() {
 
     function handleTileEdit(value){
         setTileEditMode(value)
-        console.log(tileEditMode)
+        
     }    
    
     

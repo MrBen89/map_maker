@@ -23,14 +23,24 @@ let tileRam = [
   [0,0,0,0,0,0,0,0],
   [0,0,0,0,0,0,0,0],
 ];
-
+let tempTileList = []
 
 
 
 export function TileDraw(props) {
   const canvasRef = useRef(null);
 
-  console.log("init" + props.tileList)
+  function saveLocal() {
+    try{
+      localStorage.setItem('tileList', JSON.stringify(tempTileList))
+      console.log('tilemap saved successfuly')
+      console.log(localStorage.getItem('tileList'))
+    } catch (err) {
+      console.error('something went wrong', err)
+      return undefined;
+    }
+          
+  }
 
   function tileCopy(b){
     let a = []
@@ -48,11 +58,12 @@ export function TileDraw(props) {
   }
 
   function saveTile() {
-    let tempTileList = []
+    
     props.tileList.forEach((tile) => tempTileList.push(tile.slice()))
     tempTileList.push(tileCopy(tileRam)); 
+    saveLocal();
     props.setTileList(tempTileList)
-    console.log(tempTileList)
+    
     props.handleTileEdit(false)
   }
   
@@ -111,28 +122,6 @@ export function TileDraw(props) {
            
     }
 
-
-
-    //Read tile data
-    
-
-    function readTile() {
-      for (let x = 0; x < 8; x++) {
-        for (let y = 0; y < 8; y++){
-          const pixel = context.getImageData((x+1)*zoomFactor, (y+1)*zoomFactor, 1, 1);
-          
-          if (pixel.data[0] != 0){
-            tileRam[y][x] = 1;
-          } else {
-            tileRam[y][x] = 0;
-          }
-          
-
-        }
-        
-      }
-      
-    };
 
     //Blanks and rerenders the canvas
     function updateCanvas(event) {

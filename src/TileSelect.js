@@ -46,7 +46,7 @@ export function TileSelect(props) {
   useEffect(() => {
 
     let tileList = props.tileList;
-    console.log("TS list" + tileList)
+    
 
     let currentTiles = [
       
@@ -222,7 +222,7 @@ export function TileSelect(props) {
       canvas.removeEventListener("mousemove", updateCanvas);
     })
     
-  }, []);
+  }, [props.tileList]);
 
   return <canvas ref={canvasRef} width='320' height='320'/>
 }

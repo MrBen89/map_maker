@@ -86,9 +86,7 @@ export function Canvas(props) {
   let zoomFactor = zoom * 8;;
   let viewCoords = props.viewCoords;
   
-  console.log(viewCoords)
-
-  useEffect(() => {
+ useEffect(() => {
 
     
     let previousTiles= [];
@@ -166,7 +164,6 @@ export function Canvas(props) {
     function drawMappedTiles() {
       if (layer == 0){
         currentUpperTiles.forEach((element) => {
-          console.log(element.x, viewCoords[0])
           if (element.x >= viewCoords[0]  && element.x < viewCoords[0] +viewWidth && element.y >= viewCoords[1] && element.y < viewCoords[1] + viewHeight) {
               console.log("drawing")
               drawTile(element.tile, (element.x - viewCoords[0]) * zoomFactor, (element.y - viewCoords[1]) * zoomFactor, foregroundColour);
