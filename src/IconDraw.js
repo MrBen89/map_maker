@@ -1,4 +1,7 @@
 import { useRef, useEffect } from 'react';
+import { blank_tile, example_icon, } from "./Tiles";
+
+
 
 //Initialise global variables
 let zoom = 5;
@@ -19,18 +22,18 @@ let tileRam = [
   [0,0,0,0,0,0,0,0],
   [0,0,0,0,0,0,0,0],
 ];
-let tempTileList = []
+let tempIconList = []
 
 
 
-export function TileDraw(props) {
+export function IconDraw(props) {
   const canvasRef = useRef(null);
 
   function saveLocal() {
     try{
-      localStorage.setItem('tileList', JSON.stringify(tempTileList))
-      console.log('tilemap saved successfuly')
-      console.log(localStorage.getItem('tileList'))
+      localStorage.setItem('iconList', JSON.stringify(tempIconList))
+      console.log('iconmap saved successfuly')
+      console.log(localStorage.getItem('iconList'))
     } catch (err) {
       console.error('something went wrong', err)
       return undefined;
@@ -55,12 +58,13 @@ export function TileDraw(props) {
 
   function saveTile() {
     
-    props.tileList.forEach((tile) => tempTileList.push(tile.slice()))
-    tempTileList.push(tileCopy(tileRam)); 
+    props.iconList.forEach((tile) => tempIconList.push(tile.slice()))
+    tempIconList.push(tileCopy(tileRam)); 
+    console.log(localStorage.getItem('iconList'))
     saveLocal();
-    props.setTileList(tempTileList)
+    props.setIconList(tempIconList)
     
-    props.handleTileEdit(false)
+    props.handleIconEdit(false)
   }
   
 
@@ -184,6 +188,6 @@ export function TileDraw(props) {
   return (<div>
     <canvas ref={canvasRef} width={8*zoomFactor} height={8*zoomFactor}/>
     <input type="button" value="Save Tile" onClick={() => saveTile()} /> 
-    <input type="button" value="Cancel" onClick={() => props.handleTileEdit(false)} /> 
+    <input type="button" value="Cancel" onClick={() => props.handleIconEdit(false)} /> 
   </div> )
 }

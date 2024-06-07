@@ -1,10 +1,9 @@
 import { useRef, useEffect } from 'react';
-import { blank_tile, example_icon } from "./Tiles";
+
 
 
 //temporary tile substitutes
-let blank = blank_tile;
-let example1 = example_icon;
+
 
 
 //Initialise global variables
@@ -32,12 +31,12 @@ export function IconSelect(props) {
 
   useEffect(() => {
 
-    let tileList = [blank, example1 ];
+    let tileList = props.iconList;
 
     let currentTiles = [
       
     ];
-    
+    console.log(props.iconList)
     let currentCursor =   { x: 0, y: 0 }
     let selectedTile =    { x: 0, y: 0 }
     let currentTile =     { x: 0, y: 0 }

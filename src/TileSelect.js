@@ -202,7 +202,7 @@ export function TileSelect(props) {
         tileRam[6], 
         tileRam[7]);
       props.setSelectedTile(tempRam, "Tile");
-      console.log("RAM", tempRam)
+      
      
       context.beginPath();
       context.strokeStyle = boxColour;      

@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { TileSelect } from './TileSelect.js';
 import { TileDraw } from './TileDraw.js';
 import { IconSelect } from './IconSelect.js';
+import { IconDraw } from './IconDraw.js';
 import { Canvas } from './Canvas.js';
 import { blank_tile, example_tile1, example_tile2, example_tile3, example_tile4, example_tile5, 
-    example_tile6, example_tile7, example_tile8, example_tile9, example_tile10, example_tile11, } from "./Tiles";
+    example_tile6, example_tile7, example_tile8, example_tile9, example_tile10, example_tile11, example_icon } from "./Tiles";
 
 let blank = blank_tile;
 let example1 = example_tile1;
@@ -18,13 +19,17 @@ let example8 = example_tile8;
 let example9 = example_tile9;
 let example10 = example_tile10;
 let example11 = example_tile11;
+let icon1 = example_icon
 
 let tempTileList = [blank, example1, example2, example3, example4, example5, example6, example7, example8, example9, example10, example11, ];
+let tempIconList = [blank, icon1 ];
 let tilesLoaded = false;
+let iconsLoaded = false;
 
 function loadLocal(){
     try {
-      tempTileList = JSON.parse(localStorage.getItem("tileList"));      
+      tempTileList = JSON.parse(localStorage.getItem("tileList")); 
+      tempIconList = JSON.parse(localStorage.getItem("iconList"));     
       console.log('tilemap loaded successfuly')
     } catch (err) {
       console.error('something went wrong', err)
@@ -42,6 +47,7 @@ export function DrawView() {
     const [drawType, setDrawType] = useState("Tile");
     const [viewCoords, setViewCoords] = useState([0,0]);
     const [tileEditMode, setTileEditMode] = useState(false);
+    const [iconEditMode, setIconEditMode] = useState(false);
 
     const [selectedTile, setSelectedTile] = useState([
         [0,0,0,0,0,0,0,0],
@@ -54,15 +60,32 @@ export function DrawView() {
         [0,0,0,0,0,0,0,0],
     ]);
 
+    const [selectedIcon, setSelectedIcon] = useState([
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+    ]);
+
     
     const [tileList, setTileList] = useState(JSON.parse(localStorage.getItem('tileList')))
-   
+    const [iconList, setIconList] = useState(tempIconList)
+   console.log("drawView " + iconList)
 
     function loadTiles() {
-        if (tileList == null ) {
+        if (tileList == null && tilesLoaded == false) {
             setTileList(tempTileList)
             
             tilesLoaded = true
+        } 
+        if (iconList == null && iconsLoaded == false) {
+            setTileList(tempIconList)
+            
+            iconsLoaded = true
         } 
     }
 
@@ -75,6 +98,12 @@ export function DrawView() {
 
     const handleTileSelect = (value, type) => {
         setSelectedTile(value);
+        setDrawType(type);
+               
+    };
+
+    const handleIconSelect = (value, type) => {
+        setSelectedIcon(value);
         setDrawType(type);
                
     };
@@ -133,6 +162,11 @@ export function DrawView() {
         setTileEditMode(value)
         
     }    
+
+    function handleIconEdit(value){
+        setIconEditMode(value)
+        
+    }    
    
     
    
@@ -159,7 +193,17 @@ export function DrawView() {
                 
             </div>
             <div className="Icon-selector">
-                <IconSelect setSelectedTile={handleTileSelect} selectedTile={selectedTile} drawType={drawType} />
+                { iconEditMode 
+                    ? <div>
+                        <IconDraw handleIconEdit={handleIconEdit} setIconList={setIconList} iconList={iconList}/> 
+                        
+                      </div>
+                    : <div>
+                        <IconSelect setSelectedTile={handleTileSelect} selectedTile={selectedTile} drawType={drawType} iconList={iconList} /> 
+                        <input type="button" value="New Icon" onClick={() => handleIconEdit(true)} /> 
+                      </div>
+                }
+                
             </div>
           </div>
           
