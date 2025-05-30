@@ -37,7 +37,7 @@ function loadLocal(){
   }
   }
 
-  loadLocal()
+  //loadLocal()
 
 export function DrawView() {
 
@@ -72,9 +72,9 @@ export function DrawView() {
     ]);
 
     
-    const [tileList, setTileList] = useState(JSON.parse(localStorage.getItem('tileList')))
+    const [tileList, setTileList] = useState(tempTileList)
     const [iconList, setIconList] = useState(tempIconList)
-   console.log("drawView " + iconList)
+   console.log("drawView " + tempIconList)
 
     function loadTiles() {
         if (tileList == null && tilesLoaded == false) {
@@ -174,7 +174,7 @@ export function DrawView() {
     return (
         <div className='Screen'>  
           <div className="Main-canvas">
-            <Canvas selectedTile={selectedTile} zoom={zoom} layer={layer} handlejpegData={handleJpeg} drawType={drawType} viewCoords={viewCoords}/>
+            //<Canvas selectedTile={selectedTile} zoom={zoom} layer={layer} handlejpegData={handleJpeg} drawType={drawType} viewCoords={viewCoords}/>
           </div>
 
           <div className="Selectors">

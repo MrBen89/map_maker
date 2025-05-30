@@ -44,6 +44,7 @@ export function TileSelect(props) {
   const canvasRef = useRef(null);
 
   useEffect(() => {
+    console.log(props.tileList)
 
     let tileList = props.tileList;
     
