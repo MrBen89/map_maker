@@ -343,9 +343,11 @@ export function Canvas(props) {
    return(() => {
     canvas.removeEventListener("mouseup", handleClick);
     canvas.removeEventListener("mousemove", updateCanvas);
+    canvas.width = Math.floor(window.innerWidth * 0.6);
+    canvas.height = Math.floor(window.innerHeight * 0.6);
   })
     
   }, [props.selectedTile, props.zoom, props.layer, props.viewCoords]);
 
-  return <canvas ref={canvasRef} width='3000' height='3200'/>
+  return <canvas ref={canvasRef}/>
 }

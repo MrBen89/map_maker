@@ -174,8 +174,24 @@ export function DrawView() {
     return (
         <div className='Screen'>  
           <div className="Main-canvas">
-            //<Canvas selectedTile={selectedTile} zoom={zoom} layer={layer} handlejpegData={handleJpeg} drawType={drawType} viewCoords={viewCoords}/>
+            <Canvas selectedTile={selectedTile} zoom={zoom} layer={layer} handlejpegData={handleJpeg} drawType={drawType} viewCoords={viewCoords}/>
+          
+          <div className="Buttons">
+            <input type="button"  value="+" onClick={() => zoomIn()}/>
+            <input type="button"  value="-" onClick={() => zoomOut()}/> 
+            <input type="button"  value="Upper" onClick={() => layerUpper()}/>  
+            <input type="button"  value="Mid" onClick={() => layerMid()}/>  
+            <input type="button"  value="Lower" onClick={() => layerLower()}/> 
+            <input type="button"  value="Save to JPEG" href={jpegData}/> 
+            <input type="button"  value="←" onClick={() => scrollLeft()}/> 
+            <input type="button"  value="↑" onClick={() => scrollUp()}/> 
+            <input type="button"  value="→" onClick={() => scrollRight()}/> 
+            <input type="button"  value="↓" onClick={() => scrollDown()}/> 
+            
+          </div>  
           </div>
+
+          
 
           <div className="Selectors">
             <div className="Tile-selector">
@@ -208,19 +224,7 @@ export function DrawView() {
           </div>
           
           
-          <div className="Buttons">
-            <input type="button"  value="+" onClick={() => zoomIn()}/>
-            <input type="button"  value="-" onClick={() => zoomOut()}/> 
-            <input type="button"  value="Upper" onClick={() => layerUpper()}/>  
-            <input type="button"  value="Mid" onClick={() => layerMid()}/>  
-            <input type="button"  value="Lower" onClick={() => layerLower()}/> 
-            <input type="button"  value="Save to JPEG" href={jpegData}/> 
-            <input type="button"  value="←" onClick={() => scrollLeft()}/> 
-            <input type="button"  value="↑" onClick={() => scrollUp()}/> 
-            <input type="button"  value="→" onClick={() => scrollRight()}/> 
-            <input type="button"  value="↓" onClick={() => scrollDown()}/> 
-            
-          </div>  
+          
             
           
         

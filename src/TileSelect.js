@@ -221,9 +221,11 @@ export function TileSelect(props) {
     return(() => {
       canvas.removeEventListener("click", handleClick);
       canvas.removeEventListener("mousemove", updateCanvas);
+      canvas.width = Math.floor(window.innerWidth * 0.25);
+      canvas.height = Math.floor(window.innerHeight * 0.25);
     })
     
   }, [props.tileList]);
 
-  return <canvas ref={canvasRef} width='320' height='320'/>
+  return <canvas ref={canvasRef} />
 }

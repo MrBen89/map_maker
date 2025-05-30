@@ -24,9 +24,8 @@ Canvas {
 }
 
 .Selectors {
-  float: right;
   max-height: 80vh;
-  max-width: 20%;
+  max-width: 30%;
   overflow: hidden;
   margin: 2%;
   vertical-align: top;
@@ -34,9 +33,6 @@ Canvas {
 }
 
 .Tile-selector {
-  float: right;
-  max-height: 30vh;
-  max-width: 20vw;
   overflow: hidden;
   margin: 2%;
   display: inline-block;
@@ -44,9 +40,6 @@ Canvas {
 }
 
 .Icon-selector {
-  float: right;
-  max-height: 30vh;
-  max-width: 20vw;
   overflow: hidden;
   margin: 2%;
   display: inline-block;
@@ -54,7 +47,7 @@ Canvas {
 }
 
 .Buttons {
-  float: left;
+  margin: 10px;
 }
 
 .App-header {
