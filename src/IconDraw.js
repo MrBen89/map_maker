@@ -181,12 +181,14 @@ export function IconDraw(props) {
     return(() => {
       canvas.removeEventListener("click", handleClick);
       canvas.removeEventListener("mousemove", updateCanvas);
+      canvas.width = Math.floor(window.innerWidth * 0.25);
+      canvas.height = Math.floor(window.innerHeight * 0.25);
     })
     
   }, []);
 
   return (<div>
-    <canvas ref={canvasRef} width={8*zoomFactor} height={8*zoomFactor}/>
+    <canvas ref={canvasRef}/>
     <input type="button" value="Save Tile" onClick={() => saveTile()} /> 
     <input type="button" value="Cancel" onClick={() => props.handleIconEdit(false)} /> 
   </div> )
