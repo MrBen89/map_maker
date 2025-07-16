@@ -29,9 +29,9 @@ function App() {
       
       <header className="App-header">
         <div className="tab-box">
-          <button className="tab active-tab" onClick={() => handleModeEdit("Draw")}>Draw</button>
-          <button className="tab" onClick={() => handleModeEdit("Journal")}>Journal</button>
-          <button className="tab" onClick={() => handleModeEdit("Char")}>Character Sheet</button>
+          <button className={`tab ${(mode=="Draw") ? "active-tab" : ""}`} onClick={() => handleModeEdit("Draw")}>Draw</button>
+          <button className={`tab ${(mode=="Journal") ? "active-tab" : ""}`} onClick={() => handleModeEdit("Journal")}>Journal</button>
+          <button className={`tab ${(mode=="Char") ? "active-tab" : ""}`} onClick={() => handleModeEdit("Char")}>Character Sheet</button>
         </div>
 
         {drawMode()}
