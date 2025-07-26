@@ -62,6 +62,7 @@ export function TileDraw(props) {
     
     props.handleTileEdit(false)
   }
+  console.log(props.tileList)
   
 
   useEffect(() => {

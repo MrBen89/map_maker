@@ -26,6 +26,31 @@ let tempIconList = [blank, icon1 ];
 let tilesLoaded = false;
 let iconsLoaded = false;
 
+
+
+const Fetch = (setTileList) => {
+    let tiles = []
+  useEffect(() => {
+    fetch('http://127.0.0.1:3000/square_tiles')
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        for (const element of data) {
+            let numEl = []
+            for (const line of element.map) {
+                numEl.push(line.map(Number))
+            }
+           
+        tiles.push(numEl)
+        };
+        setTileList(tiles);
+        tilesLoaded = true;
+      })
+  }, []);}
+
+
+
 function loadLocal(){
     try {
       tempTileList = JSON.parse(localStorage.getItem("tileList")); 
@@ -40,6 +65,8 @@ function loadLocal(){
   //loadLocal()
 
 export function DrawView() {
+
+    const [tileList, setTileList] = useState(tempTileList)
 
     const [zoom, setZoom] = useState(5);
     const [layer, setLayer] = useState(1);
@@ -72,9 +99,7 @@ export function DrawView() {
     ]);
 
     
-    const [tileList, setTileList] = useState(tempTileList)
     const [iconList, setIconList] = useState(tempIconList)
-   console.log("drawView " + tempIconList)
 
     function loadTiles() {
         if (tileList == null && tilesLoaded == false) {
@@ -127,35 +152,29 @@ export function DrawView() {
     function zoomIn(){
         if (zoom < 10){
             setZoom(zoom+1)
-            console.log("app", zoom);
         }
     }
 
     function zoomOut(){
         if (zoom > 1){
             setZoom(zoom-1)
-            console.log("app", zoom);
         }
     }
 
     function scrollUp(){
         setViewCoords([viewCoords[0], viewCoords[1] -1])
-        console.log(viewCoords)
     }
 
     function scrollDown(){
         setViewCoords([viewCoords[0], viewCoords[1] +1])
-        console.log(viewCoords)
     }
     
     function scrollLeft(){
         setViewCoords([viewCoords[0] -1, viewCoords[1]])
-        console.log(viewCoords)
     }
     
     function scrollRight(){
         setViewCoords([viewCoords[0] +1, viewCoords[1]])
-        console.log(viewCoords)
     }   
 
     function handleTileEdit(value){
@@ -168,8 +187,9 @@ export function DrawView() {
         
     }    
    
-    
-   
+    Fetch(setTileList)   
+    console.log (tempTileList)
+    console.log (tileList)
        
     return (
         <div className='Screen'>  
@@ -196,14 +216,18 @@ export function DrawView() {
             <div className="Tile-selector">
                 
                 { tileEditMode 
-                    ? <div>
+                    ? 
+                    (tilesLoaded ? <div>
                         <TileDraw handleTileEdit={handleTileEdit} setTileList={setTileList} tileList={tileList}/> 
                         
                       </div>
-                    : <div>
+                    : <div>Loading Tiles...</div>)
+                    : 
+                    (tilesLoaded ? <div>
                         <TileSelect setSelectedTile={handleTileSelect} selectedTile={selectedTile} drawType={drawType} tileList={tileList} /> 
                         <input type="button" value="New Tile" onClick={() => handleTileEdit(true)} /> 
                       </div>
+                    : <div>Loading Tiles...</div>)
                 }
                 
             </div>

@@ -42,6 +42,7 @@ let tileRam = [
 
 export function TileSelect(props) {
   const canvasRef = useRef(null);
+  console.log(props.tileList)
 
   useEffect(() => {
     console.log(props.tileList)
