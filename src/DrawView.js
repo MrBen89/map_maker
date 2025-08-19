@@ -31,7 +31,7 @@ let iconsLoaded = false;
 const Fetch = (setTileList) => {
     let tiles = []
   useEffect(() => {
-    fetch('http://127.0.0.1:3000/square_tiles')
+    fetch('http://127.0.0.1:3001/square_tiles')
       .then((res) => {
         return res.json();
       })
