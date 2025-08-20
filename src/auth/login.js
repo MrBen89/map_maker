@@ -1,8 +1,4 @@
-import { useState, useEffect } from "react";
-
-
-
-
+import { useState } from "react";
 
 export function Login(props) {
   const [userData, setUserData] = useState({username:"", password:"",loginErrors:""});
@@ -16,15 +12,15 @@ export function Login(props) {
     setLoggedIn(true);
   }
 
-  const HandleSubmit = (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     fetch('http://127.0.0.1:3001/sessions', {
       method: 'POST', 
       headers: {'Content-Type': 'application/json',},
       body: JSON.stringify({
             user: {
-              username: "Derek",
-              password: "password"
+              username: userData.username,
+              password: userData.password
             }
       }),
     })
@@ -46,7 +42,7 @@ export function Login(props) {
 
   return (
     <div>
-      <form onSubmit={HandleSubmit}>
+      <form onSubmit={handleSubmit}>
         <div className="form-group">
           <input
             className="form-control"

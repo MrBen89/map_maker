@@ -4,6 +4,7 @@ import { DrawView } from './DrawView.js';
 import { JournalView } from './JournalView.js';
 import { CharView } from './CharView.js';
 import { Login } from './auth/Login.js';
+import { Registration } from './auth/Registration.js';
 
 
 function App() {
@@ -29,12 +30,20 @@ function App() {
     <div className="App">
       
       <header className="App-header">
-        <Login />
+        <div>
+          
+          
+        </div>
+
+        
         <div className="tab-box">
+          {/* <Login className="tab"/> */}
           <button className={`tab ${(mode=="Draw") ? "active-tab" : ""}`} onClick={() => handleModeEdit("Draw")}>Draw</button>
           <button className={`tab ${(mode=="Journal") ? "active-tab" : ""}`} onClick={() => handleModeEdit("Journal")}>Journal</button>
           <button className={`tab ${(mode=="Char") ? "active-tab" : ""}`} onClick={() => handleModeEdit("Char")}>Character Sheet</button>
+          <Registration className="tab"/>
         </div>
+        
 
         {drawMode()}
       
